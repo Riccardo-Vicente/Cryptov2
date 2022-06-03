@@ -36,7 +36,7 @@ print("Capital Cost of RE infrustructure: R {:.2f}".format(RE_cost))
 #------------------------------------------------------------------------------------------
 
 # Get mining equipment data
-df = pd.read_excel('../Data/crypto_mining_equipment.xlsx')
+df = pd.read_excel('./Data/crypto_mining_equipment.xlsx')
 #Set hardware as index
 df.set_index(df["Hardware"].values)
 print(df)
