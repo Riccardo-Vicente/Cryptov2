@@ -40,4 +40,7 @@ df = pd.read_excel('./Data/crypto_mining_equipment.xlsx')
 #Set hardware as index
 df.set_index(df["Hardware"].values)
 print(df)
+#print("Select Miner 1: ")
+#print("Select Miner 2: ")
+#print("Select Miner 3: ")
 
