@@ -37,10 +37,21 @@ print("Capital Cost of RE infrustructure: R {:.2f}".format(RE_cost))
 
 # Get mining equipment data
 df = pd.read_excel('./Data/crypto_mining_equipment.xlsx')
+
 #Set hardware as index
 df.set_index(df["Hardware"].values)
 print(df)
-#print("Select Miner 1: ")
-#print("Select Miner 2: ")
-#print("Select Miner 3: ")
+
+#Declare miners to purchase
+miner1 = 'Canaan (Avalon 6)'
+miner2 = 'GeForce RTX 3060 Ti'
+print("Miner 1: {}".format(miner1))
+print("Miner 2: {}".format(miner2))
+
+#Get miner specs
+for ind, row in df:
+    power1 = row["Power Consumption (W)"]
+print(power1)
+
+
 
