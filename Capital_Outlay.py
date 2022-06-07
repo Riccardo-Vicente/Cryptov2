@@ -71,10 +71,28 @@ print(price)
 miner1 = 'Canaan (Avalon 6)'
 miner2 = 'GeForce RTX 3060 Ti'
 print("\nSelected mining hardware:")
-print("Miner 1: {}".format(miner1))
-print("Miner 2: {}".format(miner2))
 
-#Get miner specs
+#Get selected miner specs
+i = {
+'ATI (Radeon 5850)': 0,
+'ATI (Radeon 6990)': 1,
+'Monarch BPU 600C': 2,
+'Canaan (Avalon 6)': 3,
+'Bitmain (Antminer S9)': 4,
+'GeForce GTX 1080 Ti': 5,
+'Bitmain (Antminer S19)': 6,
+'GeForce RTX 3060 Ti': 7,
+}
+print("Miner 1: {}".format(miner1))
+m1 = i[miner1]
+print("Power Consumption: {} W".format(power[m1]))
+print("Price: {} USD".format(price[m1]))
+
+print("\nMiner 2: {}".format(miner2))
+m2 = i[miner2]
+print("Power Consumption: {} W".format(power[m2]))
+print("Price: {} USD".format(price[m2]))
+
 
 
 
