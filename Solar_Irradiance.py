@@ -25,6 +25,12 @@ for ind, row in df.iterrows():
 
 print(df)
 
+#Number of miners that can operate
 
+    #Capacity of solar system each hour
+for ind, row in df.iterrows():
+    df.loc[ind, "Number of miners"] = (row["Solar Energy (kWh/h)"]*1000)/Capital_Outlay.power[Capital_Outlay.m1]
+print("Number of miners that can run @ each hour:")
+print(round(df["Number of miners"],0))
 
 

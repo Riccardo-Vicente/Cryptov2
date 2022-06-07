@@ -7,6 +7,7 @@ from  openpyxl import load_workbook
 #------------------------------------------------------------------------------------------------------
 
 # Defining Renewable energy costs ($/MWh)
+
 LCOE = {
     'pv_energy_residential': 189,
     'pv_energy_largescale': 37,
