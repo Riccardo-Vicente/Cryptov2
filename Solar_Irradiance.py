@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
 import Capital_Outlay
-
+#--------------------------------------------------------------------------------------
+#Solar Irradiance data and solar energy calcs
+#--------------------------------------------------------------------------------------
 solar_irradiance_file = "Data/Hourly_solar_irradiance_Bloemfontein.csv"
 df = pd.read_csv(solar_irradiance_file)
 print(df)
@@ -24,13 +26,27 @@ for ind, row in df.iterrows():
     df.loc[ind, "Solar Energy (kWh/h)"] = (row["Solar Irradiance (Wh/m^2)"]/1000)*area*r*PR
 
 print(df)
-
+#----------------------------------------------------------------------------------------
 #Number of miners that can operate
+#----------------------------------------------------------------------------------------
 
-    #Capacity of solar system each hour
 for ind, row in df.iterrows():
     df.loc[ind, "Number of miners"] = (row["Solar Energy (kWh/h)"]*1000)/Capital_Outlay.power[Capital_Outlay.m1]
 print("Number of miners that can run @ each hour:")
 print(round(df["Number of miners"],0))
 
+#----------------------------------------------------------------------------------------
+#Return from IPP sales
+#----------------------------------------------------------------------------------------
 
+#Read electricity tariff history
+tariff_file = "Data/Electricity_Tarrifs.csv"
+et = pd.read_csv(tariff_file)
+print(et)
+
+#Declare TOU tariffs
+
+season = "LD"
+for ind, row in df.iterrows():
+    if 5 <= row["Month"] <= 7:
+        season = "HD"
