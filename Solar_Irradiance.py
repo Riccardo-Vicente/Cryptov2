@@ -46,6 +46,7 @@ print(et)
 
 #Declare TOU tariffs
 Weekday_Tariff= {
+    0: 'OffPeak',
     1: 'OffPeak',
     2: 'OffPeak',
     3: 'OffPeak',
@@ -70,19 +71,45 @@ Weekday_Tariff= {
     22: 'Off-Peak',
     23: 'Off-Peak',
 }
-season = "LD"
-for ind, row in df.iterrows():
-    if 5 <= row["Month"] <= 7:
-        season = "HD"
 
-for ind, row in df.iterrows():
-    if row["Day"] = weekday
-    IPP_rev = Weekday_Tariff[row["Hour"]]*row["Solar Energy (kWh/h)"]/100
+Sat_Tariff = {
+    0: 'OffPeak',
+    1: 'OffPeak',
+    2: 'OffPeak',
+    3: 'OffPeak',
+    4: 'OffPeak',
+    5: 'OffPeak',
+    6: 'OffPeak',
+    7: 'Standard',
+    8: 'Standard',
+    9: 'Standard',
+    10: 'Standard',
+    11: 'Standard',
+    12: 'OffPeak',
+    13: 'OffPeak',
+    14: 'OffPeak',
+    15: 'OffPeak',
+    16: 'OffPeak',
+    17: 'OffPeak',
+    18: 'Standard',
+    19: 'Standard',
+    20: 'Off-Peak',
+    21: 'Off-Peak',
+    22: 'Off-Peak',
+    23: 'Off-Peak',
+}
+#for ind, row in df.iterrows():
 
-    if row["Day"] = Saturday
-    IPP_rev = Sat_Tariff[row["Hour"]] * row["Solar Energy (kWh/h)"] / 100
+   # season = "LD"
+   # if 5 <= row["Month"] <= 7:
+   #     season = "HD"
 
-for ind, row in df.iterrows():
-    df.loc[ind, "Hourly Revenue (R)"] = Weekday_Tariff[row["Hour"]]*row["Solar Energy (kWh/h)"]/100
+   # if row["Day"] = weekday
+   #     IPP_rev = Weekday_Tariff[row["Hour"]]*row["Solar Energy (kWh/h)"]/100
 
-print(round(df,2))
+  #  if row["Day"] = Saturday
+  #      IPP_rev = Sat_Tariff[row["Hour"]] * row["Solar Energy (kWh/h)"] / 100
+
+   # df.loc[ind, "Hourly Revenue (R)"] = IPP_rev
+
+#print(round(df,2))

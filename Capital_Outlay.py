@@ -68,6 +68,14 @@ for cell in price_col:
         price.append(a.value)
 print(price)
 
+hash_rate_col = ws['F2':'F9']
+print("Miner Hash rates:")
+hash_rate = []
+for cell in hash_rate_col:
+    for a in cell:
+        hash_rate.append(a.value)
+print(hash_rate)
+
 #Declare miners to purchase
 miner1 = 'Canaan (Avalon 6)'
 miner2 = 'GeForce RTX 3060 Ti'
@@ -88,11 +96,13 @@ print("Miner 1: {}".format(miner1))
 m1 = i[miner1]
 print("Power Consumption: {} W".format(power[m1]))
 print("Price: {} USD".format(price[m1]))
+print("Hash Rate: {} GH/s".format(hash_rate[m1]))
 
 print("\nMiner 2: {}".format(miner2))
 m2 = i[miner2]
 print("Power Consumption: {} W".format(power[m2]))
 print("Price: {} USD".format(price[m2]))
+print("Hash Rate: {} GH/s".format(hash_rate[m2]))
 
 
 
