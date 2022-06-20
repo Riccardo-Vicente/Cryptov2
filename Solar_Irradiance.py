@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import Capital_Outlay
+from datetime import datetime
 #--------------------------------------------------------------------------------------
 #Solar Irradiance data and solar energy calcs
 #--------------------------------------------------------------------------------------
@@ -46,70 +47,58 @@ print(et)
 
 #Declare TOU tariffs
 Weekday_Tariff= {
-    0: 'OffPeak',
-    1: 'OffPeak',
-    2: 'OffPeak',
-    3: 'OffPeak',
-    4: 'OffPeak',
-    5: 'OffPeak',
-    6: 'Standard',
-    7: 'Peak',
-    8: 'Peak',
-    9: 'Peak',
-    10: 'Standard',
-    11: 'Standard',
-    12: 'Standard',
-    13: 'Standard',
-    14: 'Standard',
-    15: 'Standard',
-    16: 'Standard',
-    17: 'Standard',
-    18: 'Peak',
-    19: 'Peak',
-    20: 'Standard',
-    21: 'Standard',
-    22: 'Off-Peak',
-    23: 'Off-Peak',
+    0: 'OffPeak', 1: 'OffPeak', 2: 'OffPeak', 3: 'OffPeak', 4: 'OffPeak', 5: 'OffPeak', 6: 'Standard', 7: 'Peak',
+    8: 'Peak', 9: 'Peak', 10: 'Standard', 11: 'Standard', 12: 'Standard', 13: 'Standard', 14: 'Standard',
+    15: 'Standard', 16: 'Standard', 17: 'Standard', 18: 'Peak', 19: 'Peak', 20: 'Standard', 21: 'Standard',
+    22: 'OffPeak', 23: 'OffPeak'
 }
-
 Sat_Tariff = {
-    0: 'OffPeak',
-    1: 'OffPeak',
-    2: 'OffPeak',
-    3: 'OffPeak',
-    4: 'OffPeak',
-    5: 'OffPeak',
-    6: 'OffPeak',
-    7: 'Standard',
-    8: 'Standard',
-    9: 'Standard',
-    10: 'Standard',
-    11: 'Standard',
-    12: 'OffPeak',
-    13: 'OffPeak',
-    14: 'OffPeak',
-    15: 'OffPeak',
-    16: 'OffPeak',
-    17: 'OffPeak',
-    18: 'Standard',
-    19: 'Standard',
-    20: 'Off-Peak',
-    21: 'Off-Peak',
-    22: 'Off-Peak',
-    23: 'Off-Peak',
+    0: 'OffPeak', 1: 'OffPeak', 2: 'OffPeak', 3: 'OffPeak', 4: 'OffPeak', 5: 'OffPeak', 6: 'OffPeak', 7: 'Standard',
+    8: 'Standard', 9: 'Standard', 10: 'Standard', 11: 'Standard', 12: 'OffPeak', 13: 'OffPeak', 14: 'OffPeak',
+    15: 'OffPeak', 16: 'OffPeak', 17: 'OffPeak', 18: 'Standard', 19: 'Standard', 20: 'OffPeak', 21: 'OffPeak',
+    22: 'OffPeak', 23: 'OffPeak'
 }
-#for ind, row in df.iterrows():
+Sun_Tariff = {
+    0: 'OffPeak', 1: 'OffPeak', 2: 'OffPeak', 3: 'OffPeak', 4: 'OffPeak', 5: 'OffPeak', 6: 'OffPeak', 7: 'OffPeak',
+    8: 'OffPeak', 9: 'OffPeak', 10: 'OffPeak', 11: 'OffPeak', 12: 'OffPeak', 13: 'OffPeak', 14: 'OffPeak',
+    15: 'OffPeak', 16: 'OffPeak', 17: 'OffPeak', 18: 'OffPeak', 19: 'OffPeak', 20: 'OffPeak', 21: 'OffPeak',
+    22: 'OffPeak', 23: 'OffPeak'
+}
 
-   # season = "LD"
-   # if 5 <= row["Month"] <= 7:
-   #     season = "HD"
+tariff = {"HD": {"Peak": "HD-Peak", "Standard": "HD-Standard", "OffPeak:": "HD-OffPeak"},
+          "LD": {"Peak": "LD-Peak", "Standard": "LD-Standard", "OffPeak:": "LD-OffPeak"}}
 
-   # if row["Day"] = weekday
-   #     IPP_rev = Weekday_Tariff[row["Hour"]]*row["Solar Energy (kWh/h)"]/100
+idx = 3
+for ind, row in df.iterrows():
+    # if month is June - Aug: (High demand season), else its Low demand season
+    if (row["Month"] >= 5) and (row["Month"] <= 7):
+        season = "HD"
+    else:
+        season = "LD"
 
-  #  if row["Day"] = Saturday
-  #      IPP_rev = Sat_Tariff[row["Hour"]] * row["Solar Energy (kWh/h)"] / 100
+    day = datetime.weekday(datetime(round(row["Year"]), round(row["Month"]), round(row["Day"])))
+    # if day is weekday
+    if day < 5:
+        TOU = Weekday_Tariff[row["Hour"]]
+    # if day is saturday
+    elif day == 5:
+        TOU = Sat_Tariff[row["Hour"]]
+    # if day is sunday
+    else:
+        TOU = Sun_Tariff[row["Hour"]]
 
-   # df.loc[ind, "Hourly Revenue (R)"] = IPP_rev
+    solar_row = df.iloc[idx]
+    solar_year = solar_row["Year"]
 
-#print(round(df,2))
+    while row["Year"] == solar_year:
+        # DO STUFF
+        tariff_ind = tariff[season][TOU]
+        IPP_rev = et[tariff_ind] * row["Solar Energy (kWh/h)"] / 100
+
+        idx += 1
+        solar_row = df.iloc[idx]
+        solar_year = solar_row["Year"]
+
+    df.loc[ind, "Hourly Revenue (R)"] = IPP_rev
+
+print(round(df, 2))

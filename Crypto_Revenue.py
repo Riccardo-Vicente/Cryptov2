@@ -1,15 +1,15 @@
 import pandas as pd
 import Capital_Outlay
 import Solar_Irradiance
-from datetime import  datetime
+from datetime import datetime
 
 df = pd.read_csv("Data/BTC_Price_Daily.csv", parse_dates=['Date'])
 df["Date"] = pd.to_datetime(df["Date"])
 df.set_index("Date")
 
-price_row = 0
+solar_idx = 0
 
-for ind, row in Solar_Irradiance.df.iterrows():
+for ind, row in df.iterrows():
     miner_frac = (Capital_Outlay.hash_rate[Capital_Outlay.m1]/1000) / row["Hashrate(TH/s)"]
     df.loc[ind, "Miner Fraction"] = miner_frac
 
@@ -27,5 +27,15 @@ for ind, row in Solar_Irradiance.df.iterrows():
     reward_per_hr = reward_per_block*blocks_per_hr
 
     df.loc[ind, "Miner reward per hr (USD)"] = reward_per_hr*row["BTC Price (USD)"]
+
+    solar_row = Solar_Irradiance.df.iloc[solar_idx]
+    solar_day = datetime(round(solar_row["Year"]), round(solar_row["Month"]), round(solar_row["Day"]))
+
+    while solar_day == row["Date"]:
+        print(solar_day)
+        # DO STUFF
+        solar_idx += 1
+        solar_row = Solar_Irradiance.df.iloc[solar_idx]
+        solar_day = datetime(round(solar_row["Year"]), round(solar_row["Month"]), round(solar_row["Day"]))
 
 print(df)
