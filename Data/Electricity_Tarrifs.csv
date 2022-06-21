@@ -1,6 +1,4 @@
-﻿Active Energy Charge (c/kWh),,,RuraFlex Gen - Non-local authority rates,,,,Assuming <300km trasnmission zone and < 500V,,,
-,High demand season (Jun-Aug),,,Low demand season (Sep-May),,,Service Charge (R/day) - excl VAT,,Admin Charge (R/day),
-Year,HD-Peak ,HD-Standard ,HD-OffPeak,LD-Peak ,LD-Standard ,LD-OffPeak,SC<100kW,SC>1MW,AC<100kW,AC>1MW
+﻿Year,HD-Peak ,HD-Standard ,HD-OffPeak,LD-Peak ,LD-Standard ,LD-OffPeak,SC<100kW,SC>1MW,AC<100kW,AC>1MW
 2012,327.44,83.89,44.11,90.12,54.58,37.68,11.14,116.88,3.17,50.17
 2013,211.8,64.17,34.84,69.09,47.55,30.17,12.03,126.23,3.42,54.18
 2014,228.74,69.3,37.63,74.62,51.35,32.58,12.99,136.33,3.69,58.51

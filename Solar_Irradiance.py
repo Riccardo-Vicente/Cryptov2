@@ -15,26 +15,29 @@ panel_area = 1.6236 #m^2
 
 #constants to calculate energy produced
 area = float((Capital_Outlay.RE_capacity*(1000000)/panel_power)*panel_area)
+#area = 0
 print("Solar panel area: {} m^2".format(area))
 r = float(Capital_Outlay.eff)
 PR = float(0.75)
 
 #For loop to calculate energy production per hour
+
 #year_start = int(input("Enter start date "))
 #year_end = int(input("Enter end date "))
 
 for ind, row in df.iterrows():
     df.loc[ind, "Solar Energy (kWh/h)"] = (row["Solar Irradiance (Wh/m^2)"]/1000)*area*r*PR
 
-print(df)
-#----------------------------------------------------------------------------------------
-#Number of miners that can operate
-#----------------------------------------------------------------------------------------
-
 for ind, row in df.iterrows():
+    # Number of miners that can operate
     df.loc[ind, "Number of miners"] = (row["Solar Energy (kWh/h)"]*1000)/Capital_Outlay.power[Capital_Outlay.m1]
+
+print(df)
 print("Number of miners that can run @ each hour:")
 print(round(df["Number of miners"],0))
+
+miner_avg = round(np.average((df["Number of miners"])),0)
+print("Average no. miners to purchase: {}".format(miner_avg))
 
 #----------------------------------------------------------------------------------------
 #Return from IPP sales
@@ -45,30 +48,35 @@ tariff_file = "Data/Electricity_Tarrifs.csv"
 et = pd.read_csv(tariff_file)
 print(et)
 
+OFFPEAK = 0
+STANDARD = 1
+PEAK = 2
+TARIFF = ["OffPeak", "Standard", "Peak"]
+
 #Declare TOU tariffs
-Weekday_Tariff= {
-    0: 'OffPeak', 1: 'OffPeak', 2: 'OffPeak', 3: 'OffPeak', 4: 'OffPeak', 5: 'OffPeak', 6: 'Standard', 7: 'Peak',
-    8: 'Peak', 9: 'Peak', 10: 'Standard', 11: 'Standard', 12: 'Standard', 13: 'Standard', 14: 'Standard',
-    15: 'Standard', 16: 'Standard', 17: 'Standard', 18: 'Peak', 19: 'Peak', 20: 'Standard', 21: 'Standard',
-    22: 'OffPeak', 23: 'OffPeak'
+Weekday_Tariff = {
+    0: OFFPEAK, 1: OFFPEAK, 2: OFFPEAK, 3: OFFPEAK, 4: OFFPEAK, 5: OFFPEAK, 6: STANDARD, 7: PEAK,
+    8: PEAK, 9: PEAK, 10: STANDARD, 11: STANDARD, 12: STANDARD, 13: STANDARD, 14: STANDARD,
+    15: STANDARD, 16: STANDARD, 17: STANDARD, 18: PEAK, 19: PEAK, 20: STANDARD, 21: STANDARD,
+    22: OFFPEAK, 23: OFFPEAK
 }
 Sat_Tariff = {
-    0: 'OffPeak', 1: 'OffPeak', 2: 'OffPeak', 3: 'OffPeak', 4: 'OffPeak', 5: 'OffPeak', 6: 'OffPeak', 7: 'Standard',
-    8: 'Standard', 9: 'Standard', 10: 'Standard', 11: 'Standard', 12: 'OffPeak', 13: 'OffPeak', 14: 'OffPeak',
-    15: 'OffPeak', 16: 'OffPeak', 17: 'OffPeak', 18: 'Standard', 19: 'Standard', 20: 'OffPeak', 21: 'OffPeak',
-    22: 'OffPeak', 23: 'OffPeak'
+    0: OFFPEAK, 1: OFFPEAK, 2: OFFPEAK, 3: OFFPEAK, 4: OFFPEAK, 5: OFFPEAK, 6: OFFPEAK, 7: STANDARD,
+    8: STANDARD, 9: STANDARD, 10: STANDARD, 11: STANDARD, 12: OFFPEAK, 13: OFFPEAK, 14: OFFPEAK,
+    15: OFFPEAK, 16: OFFPEAK, 17: OFFPEAK, 18: STANDARD, 19: STANDARD, 20: OFFPEAK, 21: OFFPEAK,
+    22: OFFPEAK, 23: OFFPEAK
 }
 Sun_Tariff = {
-    0: 'OffPeak', 1: 'OffPeak', 2: 'OffPeak', 3: 'OffPeak', 4: 'OffPeak', 5: 'OffPeak', 6: 'OffPeak', 7: 'OffPeak',
-    8: 'OffPeak', 9: 'OffPeak', 10: 'OffPeak', 11: 'OffPeak', 12: 'OffPeak', 13: 'OffPeak', 14: 'OffPeak',
-    15: 'OffPeak', 16: 'OffPeak', 17: 'OffPeak', 18: 'OffPeak', 19: 'OffPeak', 20: 'OffPeak', 21: 'OffPeak',
-    22: 'OffPeak', 23: 'OffPeak'
+    0: OFFPEAK, 1: OFFPEAK, 2: OFFPEAK, 3: OFFPEAK, 4: OFFPEAK, 5: OFFPEAK, 6: OFFPEAK, 7: OFFPEAK,
+    8: OFFPEAK, 9: OFFPEAK, 10: OFFPEAK, 11: OFFPEAK, 12: OFFPEAK, 13: OFFPEAK, 14: OFFPEAK,
+    15: OFFPEAK, 16: OFFPEAK, 17: OFFPEAK, 18: OFFPEAK, 19: OFFPEAK, 20: OFFPEAK, 21: OFFPEAK,
+    22: OFFPEAK, 23: OFFPEAK
 }
 
-tariff = {"HD": {"Peak": "HD-Peak", "Standard": "HD-Standard", "OffPeak:": "HD-OffPeak"},
-          "LD": {"Peak": "LD-Peak", "Standard": "LD-Standard", "OffPeak:": "LD-OffPeak"}}
+tariff = {"HD": {"Peak": "HD-Peak", "Standard": "HD-Standard", "OffPeak": "HD-OffPeak"},
+          "LD": {"Peak": "LD-Peak", "Standard": "LD-Standard", "OffPeak": "LD-OffPeak"}}
 
-idx = 3
+# Iterate through solar irradiance file
 for ind, row in df.iterrows():
     # if month is June - Aug: (High demand season), else its Low demand season
     if (row["Month"] >= 5) and (row["Month"] <= 7):
@@ -87,18 +95,21 @@ for ind, row in df.iterrows():
     else:
         TOU = Sun_Tariff[row["Hour"]]
 
-    solar_row = df.iloc[idx]
-    solar_year = solar_row["Year"]
+    # tariff_row = et.iloc[idx]
+    # tariff_year = tariff_row["Year"]
 
-    while row["Year"] == solar_year:
-        # DO STUFF
-        tariff_ind = tariff[season][TOU]
-        IPP_rev = et[tariff_ind] * row["Solar Energy (kWh/h)"] / 100
+    # while row["Year"] == tariff_year:
+    #     # DO STUFF
+    #     tariff_ind = tariff[season][TOU]
+    #     IPP_rev = et[tariff_ind] * row["Solar Energy (kWh/h)"] / 100
+    #
+    #     idx += 1
+    #     tariff_row = df.iloc[idx]
+    #     tariff_year = tariff_row["Year"]
 
-        idx += 1
-        solar_row = df.iloc[idx]
-        solar_year = solar_row["Year"]
+    tariff_row = et.loc[et["Year"] == row["Year"]]
+    tariff_ind = tariff[season][TARIFF[TOU]]
 
-    df.loc[ind, "Hourly Revenue (R)"] = IPP_rev
+    df.loc[ind, "Hourly Revenue (R)"] = row["Solar Energy (kWh/h)"] * (tariff_row[tariff_ind] / 100)
 
 print(round(df, 2))

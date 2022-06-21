@@ -18,7 +18,8 @@ renewable_type = 'pv_energy_largescale'
 USD_Rand = 15
 
 #Ask user renewable energy specs
-RE_capacity = float(input("Enter RE capacity ")) # MW
+#RE_capacity = float(input("Enter RE capacity ")) # MW
+RE_capacity = 1 #MW
 print("Capacity: {} MW".format(RE_capacity))
 
 #Determine cost of RE over lifetime
