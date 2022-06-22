@@ -37,7 +37,7 @@ print(df)
 #print("Number of miners that can run @ each hour:")
 #print(round(df["Number of miners"],0))
 
-miner_avg = round(np.average((df["Number of miners"])),0)
+miner_avg = round(np.average((df["Number of miners"])), 0)
 print("Average no. miners to purchase: {}".format(miner_avg))
 
 #----------------------------------------------------------------------------------------
@@ -99,11 +99,13 @@ for ind, row in df.iterrows():
     tariff_row = et.loc[et["Year"] == row["Year"]]
     tariff_ind = tariff[season][TARIFF[TOU]]
     tariff_price = tariff_row[tariff_ind]
-    t = tariff_price[ind]
-    df.loc[ind, "Tariffs"] = t
+   # t = tariff_price[ind]
+    #df.loc[ind, "Tariffs"] = t
+    #df["Tariff"] = t
+    print(tariff_price[0])
+   # df.loc[ind, "Hourly Revenue (R)"] = row["Solar Energy (kWh/h)"] * (tariff_price[0] / 100)
 
-#     df.loc[ind, "Hourly Revenue (R)"] = row["Solar Energy (kWh/h)"] * (tariff_row[tariff_ind] / 100)
 # df["Hourly Revenue (R)"] = df["Solar Energy (kWh/h)"] * (tariff_row[tariff_ind] / 100)
 
-print(df)
+#print(df)
 #print(round(df, 2))
