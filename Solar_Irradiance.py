@@ -96,16 +96,27 @@ for ind, row in df.iterrows():
     else:
         TOU = Sun_Tariff[row["Hour"]]
 
-    tariff_row = et.loc[et["Year"] == row["Year"]]
+    # tariff_yr = et.loc[et["Year"] == row["Year"]]
+    # tariff_ind = tariff[season][TARIFF[TOU]]
+    # tariff_price = tariff_yr[tariff_ind]
+
+    idx = 0
+    tariff_row = et.iloc[idx]
+    tariff_yr = tariff_row["Year"]
     tariff_ind = tariff[season][TARIFF[TOU]]
-    tariff_price = tariff_row[tariff_ind]
-   # t = tariff_price[ind]
-    #df.loc[ind, "Tariffs"] = t
-    #df["Tariff"] = t
-    print(tariff_price[0])
+
+    while tariff_yr == row["Year"]:
+        tariff_price = tariff_row[tariff_ind]
+        print(tariff_price)
+
+        idx += 1
+        tariff_row = et.iloc[idx]
+        tariff_yr = tariff_row["Year"]
+
+   # print(tariff_price[0])
    # df.loc[ind, "Hourly Revenue (R)"] = row["Solar Energy (kWh/h)"] * (tariff_price[0] / 100)
 
-# df["Hourly Revenue (R)"] = df["Solar Energy (kWh/h)"] * (tariff_row[tariff_ind] / 100)
+   # df["Hourly Revenue (R)"] = df["Solar Energy (kWh/h)"] * (tariff_price[0] / 100)
 
 #print(df)
-#print(round(df, 2))
+
