@@ -25,16 +25,17 @@ PR = float(0.75)
 #year_start = int(input("Enter start date "))
 #year_end = int(input("Enter end date "))
 
-for ind, row in df.iterrows():
-    df.loc[ind, "Solar Energy (kWh/h)"] = (row["Solar Irradiance (Wh/m^2)"]/1000)*area*r*PR
+#for ind, row in df.iterrows():
+  #  df.loc[ind, "Solar Energy (kWh/h)"] = (row["Solar Irradiance (Wh/m^2)"]/1000)*area*r*PR
+df["Solar Energy (kWh/h)"] = (df["Solar Irradiance (Wh/m^2)"]/1000)*area*r*PR
 
-for ind, row in df.iterrows():
+#for ind, row in df.iterrows():
     # Number of miners that can operate
-    df.loc[ind, "Number of miners"] = (row["Solar Energy (kWh/h)"]*1000)/Capital_Outlay.power[Capital_Outlay.m1]
-
+  #  df.loc[ind, "Number of miners"] = (row["Solar Energy (kWh/h)"]*1000)/Capital_Outlay.power[Capital_Outlay.m1]
+df["Number of miners"] = round((df["Solar Energy (kWh/h)"]*1000)/Capital_Outlay.power[Capital_Outlay.m1])
 print(df)
-print("Number of miners that can run @ each hour:")
-print(round(df["Number of miners"],0))
+#print("Number of miners that can run @ each hour:")
+#print(round(df["Number of miners"],0))
 
 miner_avg = round(np.average((df["Number of miners"])),0)
 print("Average no. miners to purchase: {}".format(miner_avg))
@@ -95,21 +96,14 @@ for ind, row in df.iterrows():
     else:
         TOU = Sun_Tariff[row["Hour"]]
 
-    # tariff_row = et.iloc[idx]
-    # tariff_year = tariff_row["Year"]
-
-    # while row["Year"] == tariff_year:
-    #     # DO STUFF
-    #     tariff_ind = tariff[season][TOU]
-    #     IPP_rev = et[tariff_ind] * row["Solar Energy (kWh/h)"] / 100
-    #
-    #     idx += 1
-    #     tariff_row = df.iloc[idx]
-    #     tariff_year = tariff_row["Year"]
-
     tariff_row = et.loc[et["Year"] == row["Year"]]
     tariff_ind = tariff[season][TARIFF[TOU]]
+    tariff_price = tariff_row[tariff_ind]
+    t = tariff_price[ind]
+    df.loc[ind, "Tariffs"] = t
 
-    df.loc[ind, "Hourly Revenue (R)"] = row["Solar Energy (kWh/h)"] * (tariff_row[tariff_ind] / 100)
+#     df.loc[ind, "Hourly Revenue (R)"] = row["Solar Energy (kWh/h)"] * (tariff_row[tariff_ind] / 100)
+# df["Hourly Revenue (R)"] = df["Solar Energy (kWh/h)"] * (tariff_row[tariff_ind] / 100)
 
-print(round(df, 2))
+print(df)
+#print(round(df, 2))
