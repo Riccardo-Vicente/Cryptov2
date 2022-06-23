@@ -8,6 +8,7 @@ df["Date"] = pd.to_datetime(df["Date"])
 df.set_index("Date")
 
 solar_idx = 0
+blocks_per_hr = 6
 
 for ind, row in df.iterrows():
     miner_frac = (Capital_Outlay.hash_rate[Capital_Outlay.m1]/1000) / row["Hashrate(TH/s)"]
@@ -23,19 +24,20 @@ for ind, row in df.iterrows():
         block_reward = 6.25
 
     reward_per_block = miner_frac*block_reward
-    blocks_per_hr = 6
     reward_per_hr = reward_per_block*blocks_per_hr
 
-    df.loc[ind, "Miner reward per hr (USD)"] = reward_per_hr*row["BTC Price (USD)"]
+   # df.loc[ind, "Miner reward per hr (USD)"] = reward_per_hr*row["BTC Price (USD)"]
 
     solar_row = Solar_Irradiance.df.iloc[solar_idx]
     solar_day = datetime(round(solar_row["Year"]), round(solar_row["Month"]), round(solar_row["Day"]))
 
     while solar_day == row["Date"]:
-        print(solar_day)
         # DO STUFF
+        USD_reward_per_hr = reward_per_hr * row["BTC Price (USD)"]
+        Solar_Irradiance.df.loc[ind, "Miner reward per hr (USD)"] = solar_row["Number of miners"] * USD_reward_per_hr
+
         solar_idx += 1
         solar_row = Solar_Irradiance.df.iloc[solar_idx]
         solar_day = datetime(round(solar_row["Year"]), round(solar_row["Month"]), round(solar_row["Day"]))
 
-print(df)
+print(Solar_Irradiance.df)

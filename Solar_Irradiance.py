@@ -77,6 +77,7 @@ Sun_Tariff = {
 tariff = {"HD": {"Peak": "HD-Peak", "Standard": "HD-Standard", "OffPeak": "HD-OffPeak"},
           "LD": {"Peak": "LD-Peak", "Standard": "LD-Standard", "OffPeak": "LD-OffPeak"}}
 
+
 # Iterate through solar irradiance file
 for ind, row in df.iterrows():
     # if month is June - Aug: (High demand season), else its Low demand season
@@ -96,22 +97,28 @@ for ind, row in df.iterrows():
     else:
         TOU = Sun_Tariff[row["Hour"]]
 
+    # ATTEMPT 1
     # tariff_yr = et.loc[et["Year"] == row["Year"]]
     # tariff_ind = tariff[season][TARIFF[TOU]]
     # tariff_price = tariff_yr[tariff_ind]
+    # print(tariff_price)
+    #ATTEMPT 1 END
 
+    #ATTEMPT 2
     idx = 0
     tariff_row = et.iloc[idx]
     tariff_yr = tariff_row["Year"]
     tariff_ind = tariff[season][TARIFF[TOU]]
 
-    while tariff_yr == row["Year"]:
+    while row["Year"] == tariff_yr:
+
         tariff_price = tariff_row[tariff_ind]
         print(tariff_price)
 
         idx += 1
         tariff_row = et.iloc[idx]
         tariff_yr = tariff_row["Year"]
+    #ATTEMPT 2 END
 
    # print(tariff_price[0])
    # df.loc[ind, "Hourly Revenue (R)"] = row["Solar Energy (kWh/h)"] * (tariff_price[0] / 100)
