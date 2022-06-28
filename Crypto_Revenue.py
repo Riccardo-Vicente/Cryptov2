@@ -13,7 +13,7 @@ df.set_index("Date")
 # eth_df = pd.read_csv("Data/ETH_Price_Daily.csv")
 # eth_df["Date"] = pd.to_datetime(eth_df["Date"])
 
-crypto = "BTC"
+#crypto = "BTC"
 
 solar_idx = 0
 blocks_per_hr = 6
@@ -36,22 +36,18 @@ for ind, row in df.iterrows():
     reward_per_block = miner_frac*block_reward
     reward_per_hr = reward_per_block*blocks_per_hr
 
-   # df.loc[ind, "Miner reward per hr (USD)"] = reward_per_hr*row["BTC Price (USD)"]
-
     solar_row = Solar_Irradiance.df.iloc[solar_idx]
     solar_day = datetime(round(solar_row["Year"]), round(solar_row["Month"]), round(solar_row["Day"]))
 
     while solar_day == row["Date"]:
-        # DO STUFF
         USD_reward_per_hr = reward_per_hr * row["BTC Price (USD)"]
         IPP_rev = solar_row["Number of miners"] * USD_reward_per_hr
         pool_fees = pool_fee * IPP_rev
-        Solar_Irradiance.df.loc[solar_idx, "Hourly Revenue (Rand) "] = round((IPP_rev - pool_fees), 2)*Capital_Outlay.USD_Rand
+        Solar_Irradiance.df.loc[solar_idx, "Hourly Revenue (Rand)"] = round((IPP_rev - pool_fees), 2)*Capital_Outlay.USD_Rand
 
         solar_idx += 1
         solar_row = Solar_Irradiance.df.iloc[solar_idx]
         solar_day = datetime(round(solar_row["Year"]), round(solar_row["Month"]), round(solar_row["Day"]))
-
 
 print(Solar_Irradiance.df)
 
