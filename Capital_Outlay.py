@@ -78,7 +78,7 @@ for cell in hash_rate_col:
 print(hash_rate)
 
 #Declare miners to purchase
-miner1 = 'Canaan (Avalon 6)'
+miner1 = 'ATI (Radeon 6990)'
 miner2 = 'GeForce RTX 3060 Ti'
 print("\nSelected mining hardware:")
 
