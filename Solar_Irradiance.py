@@ -5,10 +5,13 @@ from datetime import datetime
 #--------------------------------------------------------------------------------------
 #Solar Irradiance data and solar energy calcs
 #--------------------------------------------------------------------------------------
+crypto = "BTC"
 solar_irradiance_file = "Data/Hourly_solar_irradiance_Bloemfontein.csv"
-df = pd.read_csv(solar_irradiance_file)
+if crypto == "BTC":
+    df = pd.read_csv(solar_irradiance_file)
+if crypto == "ETH":
+    df = pd.read_csv(solar_irradiance_file, header=0, skiprows=range(1, 35063))
 print(df)
-
 #specs for a 250W Monocrystalline solar panel
 panel_power = 250 #Watts
 panel_area = 1.6236 #m^2
@@ -18,8 +21,8 @@ panel_area = 1.6236 #m^2
 #print("Solar panel area: {} m^2".format(area))
 #r = float(Capital_Outlay.eff)
 PR = float(0.75)
-area = 6000
-r = 0.1724
+area = 1000
+r = 0.5
 
 #year_start = int(input("Enter start date "))
 #year_end = int(input("Enter end date "))
