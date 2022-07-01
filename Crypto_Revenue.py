@@ -80,7 +80,10 @@ if crypto == "ETH":
             Solar_Irradiance.df.loc[solar_idx, "ETH Hourly Revenue (Rand) "] = Hrly_IPP_rev * Capital_Outlay.USD_Rand
 
             solar_idx += 1
-            solar_row = Solar_Irradiance.df.iloc[solar_idx]
+            try:
+                solar_row = Solar_Irradiance.df.iloc[solar_idx]
+            except IndexError:
+                break
             solar_day = datetime(round(solar_row["Year"]), round(solar_row["Month"]), round(solar_row["Day"]))
 
 print(Solar_Irradiance.df)
