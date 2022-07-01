@@ -2,6 +2,7 @@ import pandas as pd
 import Capital_Outlay
 import Solar_Irradiance
 from datetime import datetime
+import math
 
 crypto = Solar_Irradiance.crypto
 pool_fee = 0.02
@@ -42,7 +43,10 @@ if crypto == "BTC":
             Solar_Irradiance.df.loc[solar_idx, "BTC Hourly Revenue (Rand) "] = Hrly_IPP_rev * Capital_Outlay.USD_Rand
 
             solar_idx += 1
-            solar_row = Solar_Irradiance.df.iloc[solar_idx]
+            try:
+                solar_row = Solar_Irradiance.df.iloc[solar_idx]
+            except IndexError:
+                break
             solar_day = datetime(round(solar_row["Year"]), round(solar_row["Month"]), round(solar_row["Day"]))
 
 if crypto == "ETH":
