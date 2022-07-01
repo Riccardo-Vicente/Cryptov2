@@ -5,12 +5,12 @@ from datetime import datetime
 #--------------------------------------------------------------------------------------
 #Solar Irradiance data and solar energy calcs
 #--------------------------------------------------------------------------------------
-crypto = "ETH"
+crypto = "BTC"
 solar_irradiance_file = "Data/Hourly_solar_irradiance_Bloemfontein.csv"
 if crypto == "BTC":
-    df = pd.read_csv(solar_irradiance_file)
+    df = pd.read_csv(solar_irradiance_file)     # start at 2012
 if crypto == "ETH":
-    df = pd.read_csv(solar_irradiance_file, header=0, skiprows=range(1, 35063))
+    df = pd.read_csv(solar_irradiance_file, header=0, skiprows=range(1, 35064))     # start at 2016
 print(df)
 #specs for a 250W Monocrystalline solar panel
 panel_power = 250 #Watts
@@ -98,9 +98,9 @@ for ind, row in df.iterrows():
     tariff_ind = tariff[season][TARIFF[TOU]]
     tariff_price = tariff_yr[tariff_ind]
     # Add tariffs to df
-    df.loc[ind, "Tariffs"] = tariff_price.values[0]
+    df.loc[ind, "Tariffs"] = tariff_price.values[0]/100
 
-df["Hourly IPP Revenue (R)"] = round((df["Solar Energy (kWh/h)"] * df["Tariffs"]), 2)
+df["Hourly_IPP_Revenue_Rand"] = round((df["Solar Energy (kWh/h)"] * df["Tariffs"]), 2)
 
 print(df)
 
