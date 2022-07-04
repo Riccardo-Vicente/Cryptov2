@@ -17,12 +17,12 @@ panel_power = 250 #Watts
 panel_area = 1.6236 #m^2
 
 #constants to calculate energy produced
-#area = float((Capital_Outlay.RE_capacity*(1000000)/panel_power)*panel_area)
+area = float((Capital_Outlay.RE_capacity*(1000000)/panel_power)*panel_area)
 #print("Solar panel area: {} m^2".format(area))
-#r = float(Capital_Outlay.eff)
+r = float(Capital_Outlay.eff)
 PR = float(0.75)
-area = 1000
-r = 0.5
+#area = 1000
+#r = 0.5
 
 #year_start = int(input("Enter start date "))
 #year_end = int(input("Enter end date "))
