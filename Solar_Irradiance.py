@@ -30,7 +30,26 @@ PR = float(0.75)
 # Calculate energy production per hour
 df["Solar Energy (kWh/h)"] = (df["Solar Irradiance (Wh/m^2)"]/1000)*area*r*PR
 # Number of miners that can be powered each hour
-df["Number of miners"] = round((df["Solar Energy (kWh/h)"]*1000)/Capital_Outlay.power[Capital_Outlay.m1])
+if crypto == "BTC":
+    for ind, row in df.iterrows():
+        if row["Year"] < 2016:
+            miner_choice = Capital_Outlay.m1
+        elif row["Year"] < 2020:
+            miner_choice = Capital_Outlay.m2
+        else:
+            miner_choice = Capital_Outlay.m3
+
+        df["Number of miners"] = round((df["Solar Energy (kWh/h)"] * 1000) / Capital_Outlay.power[miner_choice])
+
+if crypto == "ETH":
+    for ind, row in df.iterrows():
+        if row["Year"] < 2020:
+            miner_choice = Capital_Outlay.m1
+        else:
+            miner_choice = Capital_Outlay.m2
+
+        df["Number of miners"] = round((df["Solar Energy (kWh/h)"]*1000)/Capital_Outlay.power[miner_choice])
+
 print(df)
 
 miner_avg = round(np.average(df["Number of miners"]), 0)
