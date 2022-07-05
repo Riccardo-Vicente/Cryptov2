@@ -80,6 +80,7 @@ print(hash_rate)
 #Declare miners to purchase
 miner1 = 'ATI (Radeon 6990)'
 miner2 = 'GeForce RTX 3060 Ti'
+miner3 = 'Bitmain (Antminer S19)'
 print("\nSelected mining hardware:")
 
 #Get selected miner specs
@@ -104,6 +105,12 @@ m2 = i[miner2]
 print("Power Consumption: {} W".format(power[m2]))
 print("Price: {} USD".format(price[m2]))
 print("Hash Rate: {} GH/s".format(hash_rate[m2]))
+
+print("\nMiner 3: {}".format(miner3))
+m3 = i[miner3]
+print("Power Consumption: {} W".format(power[m3]))
+print("Price: {} USD".format(price[m3]))
+print("Hash Rate: {} GH/s".format(hash_rate[m3]))
 
 
 

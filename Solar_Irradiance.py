@@ -5,7 +5,7 @@ from datetime import datetime
 #--------------------------------------------------------------------------------------
 #Solar Irradiance data and solar energy calcs
 #--------------------------------------------------------------------------------------
-crypto = "ETH"
+crypto = "BTC"
 solar_irradiance_file = "Data/Hourly_solar_irradiance_Bloemfontein.csv"
 if crypto == "BTC":
     df = pd.read_csv(solar_irradiance_file)     # start at 2012
@@ -71,7 +71,6 @@ Sun_Tariff = {
 
 tariff = {"HD": {"Peak": "HD-Peak", "Standard": "HD-Standard", "OffPeak": "HD-OffPeak"},
           "LD": {"Peak": "LD-Peak", "Standard": "LD-Standard", "OffPeak": "LD-OffPeak"}}
-
 
 # Iterate through solar irradiance file
 for ind, row in df.iterrows():

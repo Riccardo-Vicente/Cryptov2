@@ -16,7 +16,15 @@ if crypto == "BTC":
     df["Date"] = pd.to_datetime(df["Date"])
 
     for ind, row in df.iterrows():
-        miner_frac = (Capital_Outlay.hash_rate[Capital_Outlay.m1]/1000) / row["Hashrate(TH/s)"]
+
+        if row["Date"] < datetime(2016, 1, 1):
+            miner_choice = Capital_Outlay.m1
+        elif row["Date"] < datetime(2020, 1, 1):
+            miner_choice = Capital_Outlay.m2
+        else:
+            miner_choice = Capital_Outlay.m3
+
+        miner_frac = (Capital_Outlay.hash_rate[miner_choice]/1000) / row["Hashrate(TH/s)"]
         df.loc[ind, "Miner Fraction"] = miner_frac
 
         if row["Date"] < datetime(2012, 11, 28):
@@ -37,7 +45,13 @@ if crypto == "BTC":
         while solar_day == row["Date"]:
 
             USD_reward_per_hr = reward_per_hr * row["BTC Price (USD)"]
-            IPP_rev = solar_row["Number of miners"] * USD_reward_per_hr
+
+            if solar_row["Number of miners"] <= Solar_Irradiance.miner_avg:
+                no_miners = solar_row["Number of miners"]
+            else:
+                no_miners = Solar_Irradiance.miner_avg
+
+            IPP_rev = no_miners * USD_reward_per_hr
             pool_fees = pool_fee * IPP_rev
             Hrly_IPP_rev = round((IPP_rev - pool_fees), 2)
             Solar_Irradiance.df.loc[solar_idx, "BTC_Hourly_Revenue_Rand"] = Hrly_IPP_rev * Capital_Outlay.USD_Rand
@@ -55,7 +69,13 @@ if crypto == "ETH":
     df["Date"] = pd.to_datetime(df["Date"])
 
     for ind, row in df.iterrows():
-        miner_frac = (Capital_Outlay.hash_rate[Capital_Outlay.m1]) / row["Hashrate (GH/s)"]
+
+        if row["Date"] < datetime(2020, 1, 1):
+            miner_choice = Capital_Outlay.m1
+        else:
+            miner_choice = Capital_Outlay.m2
+
+        miner_frac = (Capital_Outlay.hash_rate[miner_choice]) / row["Hashrate (GH/s)"]
         df.loc[ind, "Miner Fraction"] = miner_frac
 
         if row["Date"] < datetime(2017, 1, 1):
@@ -74,7 +94,13 @@ if crypto == "ETH":
         while solar_day == row["Date"]:
 
             USD_reward_per_hr = reward_per_hr * row["ETH Price (USD)"]
-            IPP_rev = solar_row["Number of miners"] * USD_reward_per_hr
+
+            if solar_row["Number of miners"] <= Solar_Irradiance.miner_avg:
+                no_miners = solar_row["Number of miners"]
+            else:
+                no_miners = Solar_Irradiance.miner_avg
+
+            IPP_rev = no_miners * USD_reward_per_hr
             pool_fees = pool_fee * IPP_rev
             Hrly_IPP_rev = round((IPP_rev - pool_fees), 2)
             Solar_Irradiance.df.loc[solar_idx, "ETH_Hourly_Revenue_Rand"] = Hrly_IPP_rev * Capital_Outlay.USD_Rand
