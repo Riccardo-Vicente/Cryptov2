@@ -43,7 +43,6 @@ print("Average no. miners to purchase: {} \n".format(miner_avg))
 #Read electricity tariff history
 tariff_file = "Data/Electricity_Tarrifs.csv"
 et = pd.read_csv(tariff_file)
-print(et)
 
 OFFPEAK = 0
 STANDARD = 1

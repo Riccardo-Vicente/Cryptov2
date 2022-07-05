@@ -40,7 +40,7 @@ if crypto == "BTC":
             IPP_rev = solar_row["Number of miners"] * USD_reward_per_hr
             pool_fees = pool_fee * IPP_rev
             Hrly_IPP_rev = round((IPP_rev - pool_fees), 2)
-            Solar_Irradiance.df.loc[solar_idx, "BTC Hourly Revenue (Rand) "] = Hrly_IPP_rev * Capital_Outlay.USD_Rand
+            Solar_Irradiance.df.loc[solar_idx, "BTC_Hourly_Revenue_Rand"] = Hrly_IPP_rev * Capital_Outlay.USD_Rand
 
             solar_idx += 1
             try:
@@ -77,7 +77,7 @@ if crypto == "ETH":
             IPP_rev = solar_row["Number of miners"] * USD_reward_per_hr
             pool_fees = pool_fee * IPP_rev
             Hrly_IPP_rev = round((IPP_rev - pool_fees), 2)
-            Solar_Irradiance.df.loc[solar_idx, "ETH Hourly Revenue (Rand) "] = Hrly_IPP_rev * Capital_Outlay.USD_Rand
+            Solar_Irradiance.df.loc[solar_idx, "ETH_Hourly_Revenue_Rand"] = Hrly_IPP_rev * Capital_Outlay.USD_Rand
 
             solar_idx += 1
             try:
