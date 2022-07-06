@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 import Capital_Outlay
 from datetime import datetime
-#--------------------------------------------------------------------------------------
-#Solar Irradiance data and solar energy calcs
-#--------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------
+# Solar Irradiance data and solar energy calcs
+# --------------------------------------------------------------------------------------
 crypto = "BTC"
 solar_irradiance_file = "Data/Hourly_solar_irradiance_Bloemfontein.csv"
 if crypto == "BTC":
@@ -12,55 +12,33 @@ if crypto == "BTC":
 if crypto == "ETH":
     df = pd.read_csv(solar_irradiance_file, header=0, skiprows=range(1, 35064))     # start at 2016
 print(df)
-#specs for a 250W Monocrystalline solar panel
-panel_power = 250 #Watts
-panel_area = 1.6236 #m^2
 
-#constants to calculate energy produced
-area = float((Capital_Outlay.RE_capacity*(1000000)/panel_power)*panel_area)
-#print("Solar panel area: {} m^2".format(area))
+# specs for a 250W Monocrystalline solar panel
+panel_power = 250  # Watts
+panel_area = 1.6236  # m^2
+
+# Constants to calculate energy produced
+area = float((Capital_Outlay.RE_capacity * 1000000 / panel_power) * panel_area)
+# print("Solar panel area: {} m^2".format(area))
 r = float(Capital_Outlay.eff)
 PR = float(0.75)
-#area = 1000
-#r = 0.5
+# area = 1000
+# r = 0.5
 
-#year_start = int(input("Enter start date "))
-#year_end = int(input("Enter end date "))
+# year_start = int(input("Enter start date "))
+# year_end = int(input("Enter end date "))
 
 # Calculate energy production per hour
 df["Solar Energy (kWh/h)"] = (df["Solar Irradiance (Wh/m^2)"]/1000)*area*r*PR
-# Number of miners that can be powered each hour
-if crypto == "BTC":
-    for ind, row in df.iterrows():
-        if row["Year"] < 2016:
-            miner_choice = Capital_Outlay.m1
-        elif row["Year"] < 2020:
-            miner_choice = Capital_Outlay.m2
-        else:
-            miner_choice = Capital_Outlay.m3
 
-        df["Number of miners"] = round((df["Solar Energy (kWh/h)"] * 1000) / Capital_Outlay.power[miner_choice])
+#miner_avg = round(np.average(df["Number of miners"]), 0)
+#print("Average no. miners to purchase: {} \n".format(miner_avg))
 
-if crypto == "ETH":
-    for ind, row in df.iterrows():
-        if row["Year"] < 2020:
-            miner_choice = Capital_Outlay.m1
-        else:
-            miner_choice = Capital_Outlay.m2
-
-        df["Number of miners"] = round((df["Solar Energy (kWh/h)"]*1000)/Capital_Outlay.power[miner_choice])
-
-print(df)
-
-miner_avg = round(np.average(df["Number of miners"]), 0)
-print("Average no. miners to purchase: {} \n".format(miner_avg))
-
-#----------------------------------------------------------------------------------------
-#Return from IPP sales
-#----------------------------------------------------------------------------------------
-
-#Read electricity tariff history
-tariff_file = "Data/Electricity_Tarrifs.csv"
+# ----------------------------------------------------------------------------------------
+# Return from IPP sales
+# ----------------------------------------------------------------------------------------
+# Read electricity tariff history
+tariff_file = "Data/Electricity_Tariffs.csv"
 et = pd.read_csv(tariff_file)
 
 OFFPEAK = 0
@@ -68,7 +46,7 @@ STANDARD = 1
 PEAK = 2
 TARIFF = ["OffPeak", "Standard", "Peak"]
 
-#Declare TOU tariffs
+# Declare TOU tariffs
 Weekday_Tariff = {
     0: OFFPEAK, 1: OFFPEAK, 2: OFFPEAK, 3: OFFPEAK, 4: OFFPEAK, 5: OFFPEAK, 6: STANDARD, 7: PEAK,
     8: PEAK, 9: PEAK, 10: STANDARD, 11: STANDARD, 12: STANDARD, 13: STANDARD, 14: STANDARD,
@@ -93,6 +71,19 @@ tariff = {"HD": {"Peak": "HD-Peak", "Standard": "HD-Standard", "OffPeak": "HD-Of
 
 # Iterate through solar irradiance file
 for ind, row in df.iterrows():
+
+    # Assign miners to select
+    if row["Year"] < 2016:
+        miner_choice = Capital_Outlay.m1
+    elif row["Year"] < 2020:
+        miner_choice = Capital_Outlay.m2
+    else:
+        miner_choice = Capital_Outlay.m3
+
+    # Number of miners that can be powered each hour
+    df["Number of miners"] = round((df["Solar Energy (kWh/h)"] * 1000) / Capital_Outlay.power[miner_choice])
+
+    # Assign electricity tariff seasons
     # if month is June - Aug: (High demand season), else its Low demand season
     if (row["Month"] >= 5) and (row["Month"] <= 7):
         season = "HD"
@@ -119,5 +110,19 @@ for ind, row in df.iterrows():
 
 df["Hourly_IPP_Revenue_Rand"] = round((df["Solar Energy (kWh/h)"] * df["Tariffs"]), 2)
 
-print(df)
+print("Miners to purchase:")
+if crypto == "BTC":
+    miner_1_avg = df["Number of miners"][:35064].mean()
+    miner_2_avg = df["Number of miners"][35065:70128].mean()
+    miner_3_avg = df["Number of miners"][70128:87672].mean()
+    print("Miner 1 average: {}".format(round(miner_1_avg, 0)))
+    print("Miner 2 average: {}".format(round(miner_2_avg, 0)))
+    print("Miner 3 average: {}".format(round(miner_3_avg, 0)))
 
+if crypto == "ETH":
+    miner_2_avg = df["Number of miners"][:35063].mean()
+    miner_3_avg = df["Number of miners"][35064:].mean()
+    print("Miner 2 average: {}".format(round(miner_2_avg, 0)))
+    print("Miner 3 average: {}".format(round(miner_3_avg, 0)))
+
+print(df)

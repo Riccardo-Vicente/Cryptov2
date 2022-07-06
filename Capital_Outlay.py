@@ -27,7 +27,7 @@ eff = 0.1724 # %
 E_annual = RE_capacity*4380*eff
 E_annual = float(E_annual)
 print("Annual Energy generation: {} MWh.".format(E_annual))
-Lifetime = 25 # years
+Lifetime = 25   # years
 
 E_lifetime = E_annual*Lifetime
 print("Lifetime Energy generation: {} MWh".format(E_lifetime))
@@ -35,12 +35,12 @@ print("Lifetime Energy generation: {} MWh".format(E_lifetime))
 RE_cost = E_lifetime*LCOE[renewable_type]*USD_Rand
 print("Capital Cost of RE infrustructure: R {:.2f}".format(RE_cost))
 print("\n")
-#------------------------------------------------------------------------------------------
-#Crypto mining infrustructre
-#------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------
+# Crypto mining infrustructre
+# ------------------------------------------------------------------------------------------
 
 # Get mining equipment data
-#df = pd.read_excel('./Data/crypto_mining_equipment.xlsx')
+# df = pd.read_excel('./Data/crypto_mining_equipment.xlsx')
 wb = load_workbook('./Data/crypto_mining_equipment.xlsx')
 ws = wb.active
 
@@ -77,13 +77,13 @@ for cell in hash_rate_col:
         hash_rate.append(a.value)
 print(hash_rate)
 
-#Declare miners to purchase
-miner1 = 'ATI (Radeon 6990)'
-miner2 = 'GeForce RTX 3060 Ti'
-miner3 = 'Bitmain (Antminer S19)'
+# Declare miners to purchase
+miner1 = 'ATI (Radeon 6990)'        # For BTC 2012
+miner2 = 'Canaan (Avalon 6)'        # For BTC or ETH 2016
+miner3 = 'Bitmain (Antminer S19)'   # For BTC or ETH 2016
 print("\nSelected mining hardware:")
 
-#Get selected miner specs
+# Get selected miner specs
 i = {
 'ATI (Radeon 5850)': 0,
 'ATI (Radeon 6990)': 1,

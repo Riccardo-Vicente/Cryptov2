@@ -11,7 +11,7 @@ solar_idx = 0
 if crypto == "BTC":
     blocks_per_hr = 6
 
-    #Read BTC file
+    # Read BTC file
     df = pd.read_csv("Data/BTC_Price_Daily.csv")
     df["Date"] = pd.to_datetime(df["Date"])
 
@@ -19,10 +19,13 @@ if crypto == "BTC":
 
         if row["Date"] < datetime(2016, 1, 1):
             miner_choice = Capital_Outlay.m1
+            miner_avg = Solar_Irradiance.miner_1_avg
         elif row["Date"] < datetime(2020, 1, 1):
             miner_choice = Capital_Outlay.m2
+            miner_avg = Solar_Irradiance.miner_2_avg
         else:
             miner_choice = Capital_Outlay.m3
+            miner_avg = Solar_Irradiance.miner_3_avg
 
         miner_frac = (Capital_Outlay.hash_rate[miner_choice]/1000) / row["Hashrate(TH/s)"]
         df.loc[ind, "Miner Fraction"] = miner_frac
@@ -46,10 +49,10 @@ if crypto == "BTC":
 
             USD_reward_per_hr = reward_per_hr * row["BTC Price (USD)"]
 
-            if solar_row["Number of miners"] <= Solar_Irradiance.miner_avg:
+            if solar_row["Number of miners"] <= miner_avg:
                 no_miners = solar_row["Number of miners"]
             else:
-                no_miners = Solar_Irradiance.miner_avg
+                no_miners = miner_avg
 
             IPP_rev = no_miners * USD_reward_per_hr
             pool_fees = pool_fee * IPP_rev
@@ -71,9 +74,11 @@ if crypto == "ETH":
     for ind, row in df.iterrows():
 
         if row["Date"] < datetime(2020, 1, 1):
-            miner_choice = Capital_Outlay.m1
-        else:
             miner_choice = Capital_Outlay.m2
+            miner_avg = Solar_Irradiance.miner_2_avg
+        else:
+            miner_choice = Capital_Outlay.m3
+            miner_avg = Solar_Irradiance.miner_3_avg
 
         miner_frac = (Capital_Outlay.hash_rate[miner_choice]) / row["Hashrate (GH/s)"]
         df.loc[ind, "Miner Fraction"] = miner_frac
@@ -95,10 +100,10 @@ if crypto == "ETH":
 
             USD_reward_per_hr = reward_per_hr * row["ETH Price (USD)"]
 
-            if solar_row["Number of miners"] <= Solar_Irradiance.miner_avg:
+            if solar_row["Number of miners"] <= miner_avg:
                 no_miners = solar_row["Number of miners"]
             else:
-                no_miners = Solar_Irradiance.miner_avg
+                no_miners = miner_avg
 
             IPP_rev = no_miners * USD_reward_per_hr
             pool_fees = pool_fee * IPP_rev
