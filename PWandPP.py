@@ -15,17 +15,23 @@ eight_yr_fact = 0.9358
 # Capital Outlay
 C_ri = Capital_Outlay.RE_cost
 # PV of mining equipment
-C_m1 = Capital_Outlay.price[Capital_Outlay.m1] * Solar_Irradiance.miner_1_avg
+if Solar_Irradiance.crypto == "ETH":
+    C_m1 = 0
+else:
+    C_m1 = Capital_Outlay.price[Capital_Outlay.m1] * Solar_Irradiance.miner_1_avg
 C_m2 = Capital_Outlay.price[Capital_Outlay.m2] * Solar_Irradiance.miner_2_avg
 C_m3 = Capital_Outlay.price[Capital_Outlay.m3] * Solar_Irradiance.miner_3_avg
 C_me = C_m1 + C_m2 + C_m3
+
+C_storage = Capital_Outlay.C_facility
+
 # Sum monthly IPP revenue from hrs
 df = Solar_Irradiance.df
 df["Date"] = pd.to_datetime(df[["Year", "Month", "Day"]])
 monthly_df = df.resample("M", on="Date").Hourly_IPP_Revenue_Rand.sum()
 print("\nMonthly revenue for IPP sales:\n")
 print(monthly_df)
-
+monthly_df.to_csv("Monthly_IPP_Revenue.csv", sep=',')
 # Calculate NPV for IPP
 r = disc_rate_pm
 sum = 0
@@ -48,6 +54,7 @@ if Solar_Irradiance.crypto == "ETH":
     monthly_df = df.resample("M", on="Date").ETH_Hourly_Revenue_Rand.sum()
 print("\nMonthly revenue for Crypto mining:\n")
 print(monthly_df)
+monthly_df.to_csv("Monthly_Crypto_Revenue.csv", sep=',')
 
 # Calculate NPV for Crypto
 r = disc_rate_pm
@@ -61,6 +68,7 @@ PV = round(sum, 2)
 print("\nPV for crypto mining: R{}".format(PV))
 print("Cost of renewable infrastructure: R{}".format(C_ri))
 print("Cost of crypto mining equipment: R{}".format(C_me))
+print("Cost of mining facility and cooling: R{}".format(C_storage))
 
 NPV = PV - C_ri - (C_m1 + C_m2*four_yr_fact + C_m3*eight_yr_fact)
 print("\nPresent Worth for crypto mining: R{}\n".format(round(NPV, 2)))
@@ -88,7 +96,10 @@ for row in annual_df:
 print(yr_count)
 print(yr_partial)
 pp = round(yr_count - 1 + yr_partial, 1)
-print("Payback period for IPP sales: {} years".format(pp))
+if yr_partial > 0:
+    print("Payback period for IPP sales: > {} years".format(yr_count))
+else:
+    print("Payback period for IPP sales: {} years".format(pp))
 
 # Calculate PP for crypto mining
 if Solar_Irradiance.crypto == "BTC":
@@ -99,9 +110,9 @@ print("\nAnnual revenue for Crypto mining:\n")
 print(annual_df)
 
 if Solar_Irradiance.crypto == "BTC":
-    capital = C_ri + C_m1
+    capital = C_ri + C_storage + C_m1
 if Solar_Irradiance.crypto == "ETH":
-    capital = C_ri + C_m2
+    capital = C_ri + C_storage + C_m2
 cum_sum = - capital
 yr_count = 0
 

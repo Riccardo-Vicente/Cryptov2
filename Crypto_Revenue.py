@@ -118,4 +118,4 @@ if crypto == "ETH":
             solar_day = datetime(round(solar_row["Year"]), round(solar_row["Month"]), round(solar_row["Day"]))
 
 print(Solar_Irradiance.df)
-
+Solar_Irradiance.df.to_csv('Hourly_Revenue_File.csv', sep=',')

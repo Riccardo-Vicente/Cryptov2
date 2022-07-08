@@ -5,7 +5,7 @@ from datetime import datetime
 # --------------------------------------------------------------------------------------
 # Solar Irradiance data and solar energy calcs
 # --------------------------------------------------------------------------------------
-crypto = "BTC"
+crypto = "ETH"
 solar_irradiance_file = "Data/Hourly_solar_irradiance_Bloemfontein.csv"
 if crypto == "BTC":
     df = pd.read_csv(solar_irradiance_file)     # start at 2012
@@ -81,7 +81,7 @@ for ind, row in df.iterrows():
         miner_choice = Capital_Outlay.m3
 
     # Number of miners that can be powered each hour
-    df["Number of miners"] = round((df["Solar Energy (kWh/h)"] * 1000) / Capital_Outlay.power[miner_choice])
+    df["Number of miners"] = round((df["Solar Energy (kWh/h)"] * 0.6 * 1000) / Capital_Outlay.power[miner_choice])
 
     # Assign electricity tariff seasons
     # if month is June - Aug: (High demand season), else its Low demand season
@@ -112,17 +112,22 @@ df["Hourly_IPP_Revenue_Rand"] = round((df["Solar Energy (kWh/h)"] * df["Tariffs"
 
 print("Miners to purchase:")
 if crypto == "BTC":
-    miner_1_avg = df["Number of miners"][:35064].mean()
-    miner_2_avg = df["Number of miners"][35065:70128].mean()
-    miner_3_avg = df["Number of miners"][70128:87672].mean()
-    print("Miner 1 average: {}".format(round(miner_1_avg, 0)))
-    print("Miner 2 average: {}".format(round(miner_2_avg, 0)))
-    print("Miner 3 average: {}".format(round(miner_3_avg, 0)))
+    miner_1_avg = df["Number of miners"][:35064].loc[df["Number of miners"] != 0].mean()
+    miner_1_avg = round(miner_1_avg, 0)
+    miner_2_avg = df["Number of miners"][35065:70128].loc[df["Number of miners"] != 0].mean()
+    miner_2_avg = round(miner_2_avg, 0)
+    miner_3_avg = df["Number of miners"][70128:87672].loc[df["Number of miners"] != 0].mean()
+    miner_3_avg = round(miner_2_avg, 0)
+    print("Miner 1 average: {}".format(miner_1_avg, 0))
+    print("Miner 2 average: {}".format(miner_2_avg, 0))
+    print("Miner 3 average: {}".format(miner_3_avg, 0))
 
 if crypto == "ETH":
-    miner_2_avg = df["Number of miners"][:35063].mean()
-    miner_3_avg = df["Number of miners"][35064:].mean()
-    print("Miner 2 average: {}".format(round(miner_2_avg, 0)))
-    print("Miner 3 average: {}".format(round(miner_3_avg, 0)))
+    miner_2_avg = df["Number of miners"][:35063].loc[df["Number of miners"] != 0].mean()
+    miner_2_avg = round(miner_2_avg, 0)
+    miner_3_avg = df["Number of miners"][35064:].loc[df["Number of miners"] != 0].mean()
+    miner_3_avg = round(miner_3_avg, 0)
+    print("Miner 2 average: {}".format(miner_2_avg, 0))
+    print("Miner 3 average: {}".format(miner_3_avg, 0))
 
 print(df)

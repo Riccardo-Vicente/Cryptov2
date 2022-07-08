@@ -79,8 +79,8 @@ print(hash_rate)
 
 # Declare miners to purchase
 miner1 = 'ATI (Radeon 6990)'        # For BTC 2012
-miner2 = 'Canaan (Avalon 6)'        # For BTC or ETH 2016
-miner3 = 'Bitmain (Antminer S19)'   # For BTC or ETH 2016
+miner2 = 'GeForce GTX 1080 Ti'        # For BTC or ETH 2016
+miner3 = 'GeForce RTX 3060 Ti'   # For BTC or ETH 2016
 print("\nSelected mining hardware:")
 
 # Get selected miner specs
@@ -112,6 +112,13 @@ print("Power Consumption: {} W".format(power[m3]))
 print("Price: {} USD".format(price[m3]))
 print("Hash Rate: {} GH/s".format(hash_rate[m3]))
 
+# Mining facility cost
+store_area = 92.9    # m^2 / 1MW
+HVAC_cost = 194 * USD_Rand    # per m^2
+Cool_cost = HVAC_cost * store_area * RE_capacity
+Construction_cost = 25800 * USD_Rand * RE_capacity
+C_facility = Cool_cost + Construction_cost
+print("Storage cost: R{}".format(C_facility))
 
 
 
